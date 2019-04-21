@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<robot name="common" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- PROPERTY LIST -->
+  <!-- All units in m-kg-s-radians unit system -->
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+
+  <!-- Inertial macros. Units are kg*m^2 -->
+  <xacro:macro name="box_inertia" params="m x y z">
+    <inertia ixx="${m*(y*y+z*z)/12}" ixy = "0" ixz = "0"
+             iyy="${m*(x*x+z*z)/12}" iyz = "0"
+             izz="${m*(x*x+z*z)/12}" /> 
+  </xacro:macro>
+  <xacro:macro name="cylinder_inertia" params="m r h">
+    <inertia ixx="${m*(3*r*r+h*h)/12}" ixy="0" ixz="0"
+             iyy="${m*(3*r*r+h*h)/12}" iyz="0"
+             izz="${m*r*r/2}" />
+  </xacro:macro>
+  <xacro:macro name="sphere_inertia" params="m r">
+    <inertia ixx="${m*r*r/5}" ixy="0" ixz="0"
+             iyy="${m*r*r/5}" iyz="0"
+             izz="${m*r*r/5}" /> 
+  </xacro:macro>
+
+  <!-- Color -->
+  <material name="Black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+  <material name="Blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+  <material name="Green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+  <material name="Gray">
+    <color rgba="0.7 0.7 0.7 1.0"/>
+  </material>
+  <material name="DarkGray">
+    <color rgba="0.3 0.3 0.3 1.0"/>
+  </material>
+  <material name="Red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+  <material name="White">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+  <material name="Yellow">
+    <color rgba="0.8 0.8 0.0 1.0"/>
+  </material>
+
+</robot>

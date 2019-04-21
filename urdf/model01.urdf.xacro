@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<robot name="model01" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Included URDF/XACRO Files -->
+  <xacro:include filename="$(find model01)/urdf/common.urdf.xacro" />
+  <xacro:include filename="$(find model01)/urdf/wheel.urdf.xacro" />
+  <xacro:include filename="$(find model01)/urdf/caster.urdf.xacro" />
+
+  <!-- base_footprint Definition -->
+  <link name="base_footprint" />
+
+  <!-- base Definition -->
+  <link name="base_link">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <visual>
+      <geometry>
+        <box size="0.069 0.138 0.050"/>
+      </geometry>
+    </visual>
+    <inertial>
+      <mass value="0.2" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <xacro:box_inertia m="0.2" x="0.069" y="0.138" z="0.050" />
+    </inertial>
+  </link>
+
+  <gazebo reference="base_link">
+    <material>Gazebo/White</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <joint name="base_joint" type="fixed">
+    <origin xyz="0 0 0.045" rpy="0 0 0" />
+    <parent link="base_footprint" />
+    <child  link="base_link" />
+  </joint>
+
+  <!-- body Definition -->
+  <link name="body_link">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <visual>
+      <geometry>
+        <cylinder radius="0.069" length="0.172" />
+      </geometry>
+    </visual>
+    <inertial>
+      <mass value="0.3" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+        <xacro:cylinder_inertia  m="0.3" r="0.069" h="0.172" />
+    </inertial>
+  </link>
+
+  <gazebo reference="body_link">
+    <material>Gazebo/White</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <joint name="body_joint" type="fixed">
+    <origin xyz="-0.036 0 0.106" rpy="0 0 0" />
+    <parent link="base_footprint" />
+    <child  link="body_link" />
+  </joint>
+
+  <!-- Wheel Definitions -->
+  <xacro:wheel sub="l" parent="base_footprint"
+    transX="0" transY="0.080"  transZ="0.033" />
+  <xacro:wheel sub="r" parent="base_footprint"
+    transX="0" transY="-0.080"  transZ="0.033" />
+
+  <!-- Caster Definition -->
+  <xacro:caster sub="0" parent="base_footprint"
+    transX="-0.080" transY="0" transZ="0.020" />
+
+  <!-- Differential drive controller  -->
+  <gazebo>
+    <plugin name="differential_drive_controller"
+      filename="libgazebo_ros_diff_drive.so">
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic> 
+      <odometryFrame>odom</odometryFrame> 
+      <odometrySource>world</odometrySource>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+      <publishOdomTF>true</publishOdomTF>
+      <publishWheelTF>false</publishWheelTF>
+      <publishTf>1</publishTf>
+      <publishWheelJointState>false</publishWheelJointState>
+      <legacyMode>false</legacyMode>
+      <updateRate>30</updateRate>
+      <leftJoint>wheel_l_joint</leftJoint>
+      <rightJoint>wheel_r_joint</rightJoint>
+      <wheelSeparation>0.160</wheelSeparation>
+      <wheelDiameter>0.066</wheelDiameter>
+      <wheelAcceleration>1.8</wheelAcceleration>
+      <wheelTorque>10</wheelTorque>
+      <rosDebugLevel>Debug</rosDebugLevel>
+    </plugin>
+  </gazebo> 
+
+</robot>
